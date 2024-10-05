@@ -1,0 +1,37 @@
+{% include "header.html"%}
+
+
+<div class="container ">
+    <div class="row  p-4">
+        {% for product in products %}
+        <div class="col-md-3 pt-4 text-center px-4 pt-2">
+            <div class="card ">
+                <a href="{{url_for('show_product', id=product.id)}}">
+                <img src="{{url_for('static', filename='images/' + product.image_1)}}" height="150" alt="{{product.product_name}}">
+                <h3 class="fs-2 ">{{product.product_name}}</h3>
+                <p>${{product.price}}</p>
+                 </a>
+                <div class="card-footer px-3">
+                <!--            Shopping Cart form-->
+                    <form action="{{url_for('add_cart')}}" method="post" class="pt-2">
+                        <input type="hidden" name="product_id" value="{{product.id}}">
+                        <button type="submit" class="btn btn-sm btn-warning " id="add_cart">Add to Cart</button>
+                        <input type="hidden" name="quantity" value="1" min="1" max="{{product.stock}}">
+                        {% set colors = product.colors.split(',') %}
+                        <select name="colors" id="colors" style="visibility: hidden;">
+                            {% for color in colors %}
+                            {% set col = color.split(':')  %}
+                            <option value="{{col[0]}}">{{col[0]|capitalize}}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+{% include "footer.html"%}

@@ -1,0 +1,66 @@
+{% include "header.html"%}
+
+<div class="container pt-5">
+    <div class="row">
+        <div class="col-md-6" id="product_image">
+
+            <img src="{{url_for('static', filename='images/' + product.image_1)}}" alt="{{product.name}}" width=400, height=400>
+        </div>
+        <div class="col-md-6">
+            <h4>{{product.product_name}}</h4>
+            <hr>
+            <p>Price: ${{product.price}}</p>
+            {% if product.discount > 0 %}
+            <p>Discount: {{product.discount}} %</p>
+            {% endif %}
+            <hr>
+            <b>Product Description</b>
+            <p>{{product.description}}</p>
+            <hr>
+<!--            Shopping Cart form-->
+            <form action="{{url_for('add_cart')}}" method="post" class="pt-2">
+                <input type="hidden" name="product_id" value="{{product.id}}">
+                <button type="submit" class="btn btn-sm btn-warning">Add to Cart</button>
+                <label >Quantity:</label>
+                <input type="number" name="quantity" value="1" min="1" max="{{product.stock}}">
+                {% set colors = product.colors.split(',') %}
+                <label >Colors:</label>
+                <select name="colors" id="">
+                    {% for color in colors %}
+                    {% set col = color.split(':')  %}
+                    <option value="{{col[0]}}">{{col[0]|capitalize}}</option>
+                    {% endfor %}
+
+                </select>
+            </form>
+
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-12 mt-3" id="s_image">
+            <img class="p-3" src="{{url_for('static', filename='images/' + product.image_1)}}" alt="{{product.name}}" width="120" height="120">
+            <img class="p-3" src="{{url_for('static', filename='images/' + product.image_2)}}" alt="{{product.name}}" width="120" height="120">
+            <img class="p-3" src="{{url_for('static', filename='images/' + product.image_3)}}" alt="{{product.name}}" width=120, height=120 >
+        </div>
+
+    </div>
+
+</div>
+<!--Display the product images-->
+<script>
+    var product_image = document.getElementById('product_image');
+    var s_image = document.getElementById('s_image').getElementsByTagName('img');
+    for(var i = 0; i < s_image.length; i++){
+    s_image[i].addEventListener('click', full_image);
+    }
+
+    function full_image(){
+        var ImageSRC = this.getAttribute('src');
+        product_image.innerHTML = "<img src = "+ImageSRC+" width='400' height='400'>"
+    }
+</script>
+
+
+
+{% include "footer.html"%}
